@@ -1,0 +1,17 @@
+canvas {
+   width: 100vw;
+   height: 100vh;
+}
+
+iframe {
+  border: 0;
+  border-radius: 20px;
+}
+
+.iframe-pos div{
+  position: absolute!important;
+}
+
+#VRButton{
+ z-index: 999999!important; 
+}
