@@ -40,7 +40,8 @@ const TradingComponent = () => {
         }
     }
 
-    function loadWidjet(name, stock) {
+    //loading the desired stock using the tradingview widget
+    function loadwidget(name, stock) {
         if (!tvScriptLoadingPromise) {
             tvScriptLoadingPromise = new Promise((resolve) => {
                 const script = document.createElement('script');
@@ -55,6 +56,8 @@ const TradingComponent = () => {
         tvScriptLoadingPromise.then(() => createWidget(name, stock))
     }
 
+    //creating a funtion to put the each widged at a desired location with a desired rotation
+    //also adding the desired stock ticker
     function Element(name, x, y, z, rotation, stock) {
         const div = document.createElement("div");
         div.style.width = "1280px";
@@ -62,7 +65,7 @@ const TradingComponent = () => {
         div.style.borderRadius = "20px";
         div.style.backgroundColor = "#fff";
         div.id = name
-        loadWidjet(name, stock)
+        loadwidget(name, stock)
 
         const object = new CSS3DObject(div);
         object.position.set(x, y, z);
@@ -76,15 +79,18 @@ const TradingComponent = () => {
         const container = document.getElementById("container");
 
         camera = new THREE.PerspectiveCamera(
-            50,
-            window.innerWidth / window.innerHeight,
-            1,
-            5000
+            50, //fov = field of view
+            window.innerWidth / window.innerHeight, //aspect ratio
+            1, //near clipping plane
+            5000 //far clipping lane
         );
+        //moving camera to desired position
         camera.position.set(0, 0, 15);
 
         scene = new THREE.Scene();
         glScene = new THREE.Scene();
+
+        //creating the ambientlight
         var ambientLight = new THREE.AmbientLight(0x555555);
         glScene.add(ambientLight);
 
@@ -119,6 +125,7 @@ const TradingComponent = () => {
         });
         container.appendChild(VRButton.createButton(glRenderer));
         const group = new THREE.Group();
+        //adding the screens with the desired stock ticker at a desired position
         group.add(Element("screen-1", 0, -2, 0, [0, 0, 0], 'NASDAQ:TSLA'));
         group.add(Element("screen-2", 7, -2, 1, [0, -Math.PI * 0.2, 0], 'NASDAQ:AAPL'));
         group.add(Element("screen-3", -7, -2, 1, [0, Math.PI * 0.2, 0], 'VANTAGE:SP500'));
@@ -138,17 +145,6 @@ const TradingComponent = () => {
         );
         glScene.add(room);
         window.addEventListener("resize", onWindowResize);
-
-        // Block iframe events when dragging camera
-        // const blocker = document.getElementById("blocker");
-        // blocker.style.display = "none";
-
-        // controls.addEventListener("start", function () {
-        //     blocker.style.display = "";
-        // });
-        // controls.addEventListener("end", function () {
-        //     blocker.style.display = "none";
-        // });
         glRenderer.setAnimationLoop(animate());
     }
 
